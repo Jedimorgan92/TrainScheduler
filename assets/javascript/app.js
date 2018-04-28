@@ -1,7 +1,6 @@
-//creates firebase link
 var trainData = new Firebase("https://trainscheduler-49c7c.firebaseio.com/");
 
-//button for adding trains
+//Submit Button
 $('#submitButton').on('click', function(){
 	//gets user input
 	var trainName = $('#trainNameInput').val().trim();
@@ -9,7 +8,7 @@ $('#submitButton').on('click', function(){
 	var firstTime = moment($('#timeInput').val().trim(), "HH:mm").format("");
 	var frequency = $('#frequencyInput').val().trim();
 
-	//creates local holder for train times
+	
 	var newTrains = {
 		name: trainName,
 		tdestination: destination,
@@ -17,19 +16,13 @@ $('#submitButton').on('click', function(){
 		tfreq: frequency,
 	}
 
-	//uploads data to the database
+	//Pushes to the database
 	trainData.push(newTrains);
-
-	//logs everything to the console
-	// console.log(newTrains.name);
-	// console.log(newTrains.tdestination);
-	// console.log(newTrains.tFirst);
-	// console.log(newTrains.tfreq);
 
 	//alert
 	alert("Train successfully added!");
 
-	//clears all of the text boxes
+	//Clears boxes
 	$('#trainNameInput').val("");
 	$('#destinationInput').val("");
 	$('#timeInput').val("");
@@ -38,7 +31,6 @@ $('#submitButton').on('click', function(){
 	return false;
 });
 
-//when a new item is added (child) do this function
 trainData.on("child_added", function(childSnapshot, prevChildKey){
 
 	// console.log(childSnapshot.val());
@@ -48,12 +40,6 @@ trainData.on("child_added", function(childSnapshot, prevChildKey){
 	var destination = childSnapshot.val().tdestination;
 	var firstTime = childSnapshot.val().tFirst;
 	var frequency = childSnapshot.val().tfreq;
-
-	//train info
-	// console.log(trainName);
-	// console.log(destination);
-	// console.log(firstTime);
-	// console.log(frequency);
 
 	//convert first time (push back 1 year to make sure it comes before current time)
 	var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
